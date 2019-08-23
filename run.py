@@ -1,1 +1,0 @@
-python big_fiubrother_display/display_worker.py "$@"

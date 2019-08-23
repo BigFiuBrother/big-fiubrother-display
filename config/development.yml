@@ -1,6 +1,6 @@
-buffer_size: 5
+buffer_size: 100
 fps: 20
-message_consumer:
+frame_consumer:
   host: localhost
   queue: processed_frame_queue
   

@@ -1,2 +1,6 @@
 big-fiubrother-display-venv/
+big_fiubrother_display/**/__pycache__
+big_fiubrother_display.egg-info/
+dist/
+build/
 tmp/
