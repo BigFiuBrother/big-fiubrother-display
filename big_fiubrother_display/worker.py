@@ -20,19 +20,18 @@ if __name__ == "__main__":
 
     queue = Queue(maxsize=settings['buffer_size'])
 
-
-    display_thread = DisplayThread(settings['fps'], queue)
-    display_thread.start()
+    display = Display(settings['fps'], queue)
+    display.start()
 
     frame_consumer = FrameConsumer(settings['frame_consumer'], queue)
     frame_consumer.start()
     
-    signal_handler = SignalHandler(processes_to_stop=[display_thread, frame_consumer])
+    signal_handler = SignalHandler(processes_to_stop=[display, frame_consumer])
 
     print('[*] Starting big-fiubrother-display')
 
     frame_consumer.wait()
-    display_thread.wait()
+    display.wait()
 
     print('[*] Stopping big-fiubrother-display')
 

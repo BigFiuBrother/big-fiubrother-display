@@ -1,3 +1,3 @@
 pyyaml
-opencv-python
+matplotlib
 big-fiubrother-core
