@@ -30,5 +30,5 @@ class Display(StoppableThread):
         sleep_time = np.max(self.time_between_frames - (time() - start_time), 0)
         sleep(sleep_time)
 
-    def _frame_to_image(frame)
+    def _frame_to_image(self,frame):
         return image_to_RGB(bytes_to_image(frame_message))
