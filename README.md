@@ -22,5 +22,5 @@ Before running, proper configuration should be considered. Inside the folder *co
 ### Run
 
 ```
-./worker.py 
+./run.py 
 ```
