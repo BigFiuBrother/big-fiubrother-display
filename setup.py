@@ -13,6 +13,5 @@ setup(
    author='Eduardo Neira, Gabriel Gayoso',
    author_email='aneira@fi.uba.ar',
    packages=find_packages(),
-   scripts=['scripts/big-fiubrother-display-worker'],
    url= 'https://github.com/BigFiuBrother/big-fiubrother-display'
 )

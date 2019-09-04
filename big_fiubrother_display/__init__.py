@@ -1,2 +1,2 @@
 from big_fiubrother_display.frame_consumer import FrameConsumer
-from big_fiubrother_display.display import Display
+from big_fiubrother_display.display_thread import DisplayThread

@@ -1,10 +1,10 @@
- #!/usr/bin/env python3
+#!/usr/bin/env python3
 
 import yaml
 import argparse
 from queue import Queue
-from big_fiubrother_display import DisplayThread, FrameConsumer
 from big_fiubrother_core import SignalHandler
+from big_fiubrother_display import FrameConsumer, DisplayThread
 
 
 if __name__ == "__main__":
@@ -19,22 +19,17 @@ if __name__ == "__main__":
         settings = yaml.safe_load(config_file)
 
     queue = Queue(maxsize=settings['buffer_size'])
-
-    display = Display(settings['fps'], queue)
-    display.start()
-
     frame_consumer = FrameConsumer(settings['frame_consumer'], queue)
-    frame_consumer.start()
-    
-    signal_handler = SignalHandler(processes_to_stop=[display, frame_consumer])
+    display_thread = DisplayThread(settings['fps'], queue)
+
+    signal_handler = SignalHandler(frame_consumer.stop, '[*] Stopping big-fiubrother-display')
 
     print('[*] Starting big-fiubrother-display')
 
-    frame_consumer.wait()
-    display.wait()
+    display_thread.start()
+    frame_consumer.start()
+    
+    display_thread.stop()
+    display_thread.wait()
 
-    print('[*] Stopping big-fiubrother-display')
-
-
-
-
+    print('[*] big-fiubrother-display stopped!')

@@ -2,9 +2,10 @@ from big_fiubrother_core import StoppableThread
 from big_fiubrother_core.image_processing_helper import bytes_to_image, image_to_RGB
 import matplotlib.pyplot as plt
 from time import time, sleep
+from queue import Empty
 
 
-class Display(StoppableThread):
+class DisplayThread(StoppableThread):
 
     def __init__(self, fps, input_queue):
         super().__init__()
@@ -16,19 +17,24 @@ class Display(StoppableThread):
         plt.axis('off')
 
     def stop(self):
-        plt.close()
         super().stop()
+        
+        plt.close()
+        self.input_queue.put(None)
+
 
     def _execute(self):
-        frame_message = input_queue.get()
+        frame_message = self.input_queue.get()
 
-        start_time = time()
+        if frame_message is not None:
 
-        plt.imshow(_frame_to_image(frame_message.frame))
-        plt.show(block=False)
+            start_time = time()
 
-        sleep_time = np.max(self.time_between_frames - (time() - start_time), 0)
-        sleep(sleep_time)
+            plt.imshow(self._frame_to_image(frame_message.frame))
+            plt.show(block=False)
+
+            sleep_time = np.max(self.time_between_frames - (time() - start_time), 0)
+            sleep(sleep_time)
 
     def _frame_to_image(self,frame):
         return image_to_RGB(bytes_to_image(frame_message))
