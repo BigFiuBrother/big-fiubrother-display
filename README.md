@@ -3,10 +3,10 @@ Big Fiubrother Display Application
 
 ### Install
 
-In order to install big-fiubrother-camera, a virtual environment is recommended. This can be achieved executing:
+In order to install big-fiubrother-display, a virtual environment is recommended. This can be achieved executing:
 
 ```
-python3 -m venv big-fiubrother-camera-venv
+python3 -m venv big-fiubrother-display-venv
 ```
 
 To install all the dependencies, execute the following command: 

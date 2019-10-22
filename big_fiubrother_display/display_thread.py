@@ -1,40 +1,30 @@
 from big_fiubrother_core import StoppableThread
-from big_fiubrother_core.image_processing_helper import bytes_to_image, image_to_RGB
-import matplotlib.pyplot as plt
-from time import time, sleep
-from queue import Empty
+from time import time
+import cv2
 
 
 class DisplayThread(StoppableThread):
 
-    def __init__(self, fps, input_queue):
+    def __init__(self, configuration, input_queue):
         super().__init__()
-        self.fps = fps
-        self.time_between_frames = 1 / self.fps
-        
+        self.name = configuration['name']
+        self.fps = configuration['fps']
+        self.time_between_frames = 1000 // self.fps
         self.input_queue = input_queue
-        
-        plt.axis('off')
 
-    def stop(self):
-        super().stop()
-        
-        plt.close()
-        self.input_queue.put(None)
-
+        cv2.namedWindow(self.name)
 
     def _execute(self):
-        frame_message = self.input_queue.get()
+        frame = self.input_queue.get()
 
-        if frame_message is not None:
-
+        if frame is not None:
             start_time = time()
 
-            plt.imshow(self._frame_to_image(frame_message.frame))
-            plt.show(block=False)
+            cv2.imshow(self.name, frame)
 
-            sleep_time = np.max(self.time_between_frames - (time() - start_time), 0)
-            sleep(sleep_time)
+            sleep_time = np.max(self.time_between_frames - int(1000 * (time() - start_time)), 1)
+            cv2.waitKey(sleep_time)
 
-    def _frame_to_image(self,frame):
-        return image_to_RGB(bytes_to_image(frame_message))
+    def _stop(self):
+        cv2.destroyWindow(self.name)
+        self.input_queue.put(None)

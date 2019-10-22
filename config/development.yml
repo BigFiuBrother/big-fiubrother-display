@@ -1,6 +1,9 @@
 buffer_size: 100
-fps: 20
-frame_consumer:
+display: 
+  fps: 20
+  name: Big Fiubrother
+consumer:
   host: localhost
-  queue: processed_frame_queue
-  
+  username: fiubrother
+  password: alwayswatching
+  queue: frames
