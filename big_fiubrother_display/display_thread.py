@@ -1,6 +1,7 @@
 from big_fiubrother_core import StoppableThread
 from time import time
 import cv2
+import pdb
 
 
 class DisplayThread(StoppableThread):
@@ -18,8 +19,10 @@ class DisplayThread(StoppableThread):
         frame = self.input_queue.get()
 
         if frame is not None:
+            print('Frame received')
+            pdb.set_trace()
             cv2.imshow(self.name, frame)
-            cv2.waitKey(sleep_time)
+            cv2.waitKey(self.time_between_frames)
 
     def _stop(self):
         cv2.destroyWindow(self.name)

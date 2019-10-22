@@ -1,5 +1,6 @@
 from big_fiubrother_core.message_clients.rabbitmq import Consumer
 from big_fiubrother_core.messages import decode_message
+import pdb
 
 
 class VideoChunkConsumer:

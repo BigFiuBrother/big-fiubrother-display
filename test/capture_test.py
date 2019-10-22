@@ -14,7 +14,7 @@ for file in sorted(glob('../tmp/*')):
 
     cap = cv2.VideoCapture(file)
 
-    while cap.isOpened():
+    while True:
 
         ret, frame = cap.read()
 

@@ -7,7 +7,7 @@ class VideoReaderThread(StoppableThread):
 
     def __init__(self, input_queue, output_queue):
         super().__init__()
-        self.input_queue = output_queue
+        self.input_queue = input_queue
         self.output_queue = output_queue
  
     def _execute(self):
@@ -16,13 +16,15 @@ class VideoReaderThread(StoppableThread):
         if filepath is not None:
             cap = cv2.VideoCapture(filepath)
 
-            while cap.isOpened():
-
+            while True:
                 ret, frame = cap.read()
 
                 if ret:
                     self.output_queue.put(frame)
+                else:
+                    break
 
+            cap.release()
             os.remove(filepath)
 
     def _stop(self):

@@ -9,7 +9,7 @@ class LocalPersistanceThread(StoppableThread):
     def __init__(self, configuration, input_queue, output_queue):
         super().__init__()
         self.path = configuration['tmp_path'] if 'tmp_path' in configuration else self.TMP_PATH
-        self.input_queue = output_queue
+        self.input_queue = input_queue
         self.output_queue = output_queue
  
     def _execute(self):
