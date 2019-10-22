@@ -1,14 +1,15 @@
 #!/usr/bin/python3
 
 from glob import glob
-from time import time
+from time import time, sleep
 import cv2
 
-period = 1000//40
+
+period = 1000//(40)
 frame_count = 0
 start_time = time()
 
-for file in sorted(glob('tmp/*')):
+for file in sorted(glob('../tmp/*')):
     print(file)
 
     cap = cv2.VideoCapture(file)

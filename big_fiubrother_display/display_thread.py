@@ -9,7 +9,7 @@ class DisplayThread(StoppableThread):
         super().__init__()
         self.name = configuration['name']
         self.fps = configuration['fps']
-        self.time_between_frames = 1000 // self.fps
+        self.time_between_frames = 1000 // (self.fps * 2)
         self.input_queue = input_queue
 
         cv2.namedWindow(self.name)
@@ -18,11 +18,7 @@ class DisplayThread(StoppableThread):
         frame = self.input_queue.get()
 
         if frame is not None:
-            start_time = time()
-
             cv2.imshow(self.name, frame)
-
-            sleep_time = np.max(self.time_between_frames - int(1000 * (time() - start_time)), 1)
             cv2.waitKey(sleep_time)
 
     def _stop(self):

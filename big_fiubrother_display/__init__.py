@@ -1,2 +1,4 @@
-from big_fiubrother_display.frame_consumer import FrameConsumer
+from big_fiubrother_display.video_chunk_consumer import VideoChunkConsumer
 from big_fiubrother_display.display_thread import DisplayThread
+from big_fiubrother_display.local_persistance_thread import LocalPersistanceThread
+from big_fiubrother_display.video_reader_thread import VideoReaderThread

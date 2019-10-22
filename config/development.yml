@@ -1,9 +1,11 @@
-buffer_size: 100
-display: 
-  fps: 20
-  name: Big Fiubrother
 consumer:
   host: localhost
   username: fiubrother
   password: alwayswatching
   queue: frames
+persistance:
+  tmp_path: tmp
+display: 
+  fps: 20
+  name: Big Fiubrother
+  window_size: 5
