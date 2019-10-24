@@ -5,7 +5,7 @@ with open("README.md", 'r') as f:
 
 setup(
    name='big-fiubrother-display',
-   version='0.0.1',
+   version='0.1.0',
    description='Big Fiubrother Display Application',
    license="GPLv3",
    long_description=long_description,
