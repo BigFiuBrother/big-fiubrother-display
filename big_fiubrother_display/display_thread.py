@@ -1,7 +1,6 @@
 from big_fiubrother_core import StoppableThread
-from time import time
+from datetime import datetime
 import cv2
-import pdb
 
 
 class DisplayThread(StoppableThread):
@@ -10,17 +9,17 @@ class DisplayThread(StoppableThread):
         super().__init__()
         self.name = configuration['name']
         self.fps = configuration['fps']
-        self.time_between_frames = 1000 // (self.fps * 2)
+        self.time_between_frames = 1000 // self.fps
         self.input_queue = input_queue
 
-        cv2.namedWindow(self.name)
+        cv2.namedWindow(self.name, cv2.WINDOW_NORMAL)
+        cv2.setWindowProperty(self.name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN);
 
     def _execute(self):
         frame = self.input_queue.get()
 
         if frame is not None:
-            print('Frame received')
-            pdb.set_trace()
+            print(datetime.now())
             cv2.imshow(self.name, frame)
             cv2.waitKey(self.time_between_frames)
 

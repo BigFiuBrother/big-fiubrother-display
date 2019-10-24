@@ -1,6 +1,5 @@
 from big_fiubrother_core.message_clients.rabbitmq import Consumer
 from big_fiubrother_core.messages import decode_message
-import pdb
 
 
 class VideoChunkConsumer:
@@ -9,7 +8,7 @@ class VideoChunkConsumer:
         self.consumer = Consumer(configuration, self._consumer_callback)
         self.output_queue = output_queue
  
-    def start(self):
+    def run(self):
         self.consumer.start()
 
     def _consumer_callback(self, body):
