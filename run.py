@@ -3,43 +3,65 @@
 import queue
 import signal
 import multiprocessing
-from big_fiubrother_core import SignalHandler, setup
-from big_fiubrother_display import VideoChunkConsumer, LocalPersistanceThread, VideoReaderThread, DisplayThread
+from big_fiubrother_core import (
+    SignalHandler,
+    StoppableThread,
+    setup
+)
+from big_fiubrother_display import (
+    ConsumeVideoChunks,
+    StoreVideoInFile,
+    ReadVideoFrames,
+    DisplayVideo
+)
 
 
 def consume(configuration, interprocess_queue):
-    video_chunk_consumer_to_local_persistance_thread_queue = queue.Queue()
+    thread_queue = queue.Queue()
 
-    video_chunk_consumer = VideoChunkConsumer(configuration['consumer'], video_chunk_consumer_to_local_persistance_thread_queue)
-    local_persistance_thread = LocalPersistanceThread(configuration['persistance'], video_chunk_consumer_to_local_persistance_thread_queue, interprocess_queue)
-    
-    signal_handler = SignalHandler(callback=video_chunk_consumer.stop)
+    process = StoppableThread(
+        ConsumeVideoChunks(configuration=configuration['consumer'],
+                           input_queue=thread_queue))
 
-    local_persistance_thread.start()
-    video_chunk_consumer.run()
-    
+    thread = StoppableThread(
+        StoreVideoInFile(configuration=configuration['persistance'],
+                         input_queue=thread_queue,
+                         output_queue=interprocess_queue))
+
+    signal_handler = SignalHandler(callback=process.stop)
+
+    thread.start()
+    process.run()
+
     # Signal STOP received!
-
-    local_persistance_thread.stop()
-    local_persistance_thread.wait()
+    thread.stop()
+    thread.wait()
 
 
 def display(configuration, interprocess_queue):
     # 5 seconds max size of queue of frames
-    video_reader_thread_to_display_thread_queue = queue.Queue(configuration['display']['fps'] * configuration['display']['window_size'])
+    fps = configuration['display']['fps']
+    window_size = configuration['display']['window_size']
 
-    video_reader_thread = VideoReaderThread(interprocess_queue, video_reader_thread_to_display_thread_queue)
-    display_thread = DisplayThread(configuration['display'], video_reader_thread_to_display_thread_queue)
+    thread_queue = queue.Queue(fps * window_size)
 
-    signal_handler = SignalHandler(callback=display_thread.stop)
+    thread = StoppableThread(
+        ReadVideoFrames(input_queue=interprocess_queue,
+                        output_queue=thread_queue))
 
-    video_reader_thread.start()
-    display_thread.run()
+    process = StoppableThread(
+        DisplayThread(configuration=configuration['display'],
+                      input_queue=thread_queue))
+
+    signal_handler = SignalHandler(callback=process.stop)
+
+    thread.start()
+    process.run()
 
     # Signal STOP received!
+    thread.stop()
+    thread.wait()
 
-    video_reader_thread.stop()
-    video_reader_thread.wait()
 
 if __name__ == "__main__":
     configuration = setup('Big Fiubrother Display Application')
@@ -48,15 +70,17 @@ if __name__ == "__main__":
 
     interprocess_queue = multiprocessing.Queue()
 
-    consumer_process = multiprocessing.Process(target=consume, args=(configuration, interprocess_queue,))
-    display_process = multiprocessing.Process(target=display, args=(configuration, interprocess_queue,))
+    consumer_process = multiprocessing.Process(
+        target=consume, args=(configuration, interprocess_queue,))
+    display_process = multiprocessing.Process(
+        target=display, args=(configuration, interprocess_queue,))
+
+    signal.signal(signal.SIGINT, signal.SIG_IGN)
 
     print('[*] Starting big-fiubrother-display')
 
     consumer_process.start()
     display_process.start()
-
-    signal.signal(signal.SIGINT, signal.SIG_IGN)
 
     consumer_process.join()
     display_process.join()
