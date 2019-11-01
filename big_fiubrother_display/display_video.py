@@ -8,7 +8,7 @@ class DisplayVideo(QueueTask):
         super().__init__(input_queue)
         self.name = configuration['name']
         self.fps = configuration['fps']
-        self.time_between_frames = 1000 // self.fps
+        self.frame_period = 1000 // self.fps
 
     def init(self):
         super().init()
@@ -16,9 +16,10 @@ class DisplayVideo(QueueTask):
         cv2.setWindowProperty(
             self.name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
-    def execute_with(self, frame):
+    def execute_with(self, message):
+        timestamp, frame = message
         cv2.imshow(self.name, frame)
-        cv2.waitKey(self.time_between_frames)
+        cv2.waitKey(self.frame_period)
 
     def stop(self):
         super().stop()

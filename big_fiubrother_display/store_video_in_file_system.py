@@ -23,4 +23,4 @@ class StoreVideoInFileSystem(QueueTask):
         with open(filepath, 'wb') as file:
             file.write(message.payload)
 
-        self.output_queue.put(filepath)
+        self.output_queue.put((message.timestamp, filepath))

@@ -12,7 +12,8 @@ from big_fiubrother_core import (
 from big_fiubrother_display import (
     StoreVideoInFileSystem,
     ReadVideoFrames,
-    DisplayVideo
+    DisplayVideo,
+    FrameBuffer
 )
 
 
@@ -43,10 +44,11 @@ def display(configuration, interprocess_queue):
     fps = configuration['display']['fps']
     window_size = configuration['display']['window_size']
 
-    thread_queue = queue.Queue(fps * window_size)
+    thread_queue = FrameBuffer(size=fps*window_size)
 
     thread = StoppableThread(
-        ReadVideoFrames(input_queue=interprocess_queue,
+        ReadVideoFrames(fps=fps,
+                        input_queue=interprocess_queue,
                         output_queue=thread_queue))
 
     process = StoppableThread(

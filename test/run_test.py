@@ -9,18 +9,20 @@ class VideoChunkPublisher:
 
     def __init__(self, configuration):
         self.publisher = Publisher(configuration)
-        self.index = 0
+        self.index = 0.0
 
     def publish(self, video_chunk_path):
         with open(video_chunk_path, 'rb') as file:
             buffer = file.read()
 
         message = VideoChunkMessage(camera_id='TEST_CAMERA',
-                                    timestamp='01-01-2000||00:00:0{}.0'.format(self.index),
+                                    timestamp=self.index,
                                     payload=buffer)
 
         self.publisher.publish(message)
-        self.index += 1
+        
+        print(self.index)
+        self.index += 1.0
 
         return message
 
