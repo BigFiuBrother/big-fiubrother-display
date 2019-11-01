@@ -6,11 +6,11 @@ import multiprocessing
 from big_fiubrother_core import (
     SignalHandler,
     StoppableThread,
+    ConsumeFromRabbitMQ,
     setup
 )
 from big_fiubrother_display import (
-    ConsumeVideoChunks,
-    StoreVideoInFile,
+    StoreVideoInFileSystem,
     ReadVideoFrames,
     DisplayVideo
 )
@@ -20,13 +20,13 @@ def consume(configuration, interprocess_queue):
     thread_queue = queue.Queue()
 
     process = StoppableThread(
-        ConsumeVideoChunks(configuration=configuration['consumer'],
-                           input_queue=thread_queue))
+        ConsumeFromRabbitMQ(configuration=configuration['consumer'],
+                            output_queue=thread_queue))
 
     thread = StoppableThread(
-        StoreVideoInFile(configuration=configuration['persistance'],
-                         input_queue=thread_queue,
-                         output_queue=interprocess_queue))
+        StoreVideoInFileSystem(configuration=configuration['persistance'],
+                               input_queue=thread_queue,
+                               output_queue=interprocess_queue))
 
     signal_handler = SignalHandler(callback=process.stop)
 
@@ -50,8 +50,8 @@ def display(configuration, interprocess_queue):
                         output_queue=thread_queue))
 
     process = StoppableThread(
-        DisplayThread(configuration=configuration['display'],
-                      input_queue=thread_queue))
+        DisplayVideo(configuration=configuration['display'],
+                     input_queue=thread_queue))
 
     signal_handler = SignalHandler(callback=process.stop)
 

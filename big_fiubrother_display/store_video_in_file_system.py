@@ -2,7 +2,7 @@ from big_fiubrother_core import QueueTask
 from os import path
 
 
-class StoreVideoinFileSystem(QueueTask):
+class StoreVideoInFileSystem(QueueTask):
 
     TMP_PATH = 'tmp'
 

@@ -10,7 +10,7 @@ class ReadVideoFrames(QueueTask):
         self.input_queue = input_queue
         self.output_queue = output_queue
 
-    def execute(self, filepath):
+    def execute_with(self, filepath):
         cap = cv2.VideoCapture(filepath)
 
         while True:
