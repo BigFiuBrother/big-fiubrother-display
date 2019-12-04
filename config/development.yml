@@ -2,10 +2,10 @@ consumer:
   host: localhost
   username: fiubrother
   password: alwayswatching
-  queue: processed_video_chunks
+  queue: interpolated_video_chunks
 persistance:
   tmp_path: tmp
 display: 
-  fps: 22
+  fps: 24
   name: 'Big Fiubrother'
   window_size: 5

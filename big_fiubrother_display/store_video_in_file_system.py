@@ -1,25 +1,19 @@
 from big_fiubrother_core import QueueTask
+from uuid import uuid4 as uuid
 from os import path
 
 
 class StoreVideoInFileSystem(QueueTask):
 
-    TMP_PATH = 'tmp'
-
     def __init__(self, configuration, input_queue, output_queue):
         super().__init__(input_queue)
-
-        if 'tmp_path' in configuration:
-            self.path = configuration['tmp_path']
-        else:
-            self.path = self.TMP_PATH
-
         self.output_queue = output_queue
+        self.tmp_path = configuration['tmp_path']
 
     def execute_with(self, message):
         filepath = path.join(
             self.tmp_path, 
-            '{}.mp4'.format(video_chunk.filename()))
+            '{}.mp4'.format(str(uuid())))
 
         with open(filepath, 'wb') as file:
             file.write(message.payload)
