@@ -4,3 +4,4 @@ big_fiubrother_display.egg-info/
 dist/
 build/
 tmp/
+log/
