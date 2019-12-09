@@ -7,8 +7,8 @@ class FrameBuffer:
         self.size = size
         self._queue = PriorityQueue(self.size)
 
-    def qzise(self):
-        return self._queue.qzise()
+    def qsize(self):
+        return self._queue.qsize()
 
     def put(self, message):
         if self._queue.full():
