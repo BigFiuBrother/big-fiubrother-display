@@ -44,7 +44,7 @@ def display(configuration, interprocess_queue):
     fps = configuration['display']['fps']
     window_size = configuration['display']['window_size']
 
-    thread_queue = FrameBuffer(size=fps*window_size)
+    thread_queue = FrameBuffer(size=0)
 
     thread = StoppableThread(
         ReadVideoFrames(fps=fps,
